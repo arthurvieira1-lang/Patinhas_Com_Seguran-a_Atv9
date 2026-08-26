@@ -1,54 +1,65 @@
+<?php
+
+session_start();
+
+
+$erro = "";
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $usuario = $_POST['usuario'];
+    $senha = $_POST['senha'];
+
+    
+    if ($usuario === "admin" && $senha === "123") {
+        $_SESSION['logado'] = true;
+        
+        header("Location: painel.php");
+        exit;
+    } else {
+        $erro = "Usuário ou senha incorretos!";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUmigos - Painel</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <title>AUmigos - Login</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
- 
-    <header class="topbar">
-        <h1>🐾 AUmigos</h1>
-        <span>Sistema de Cadastro de Clientes e Animais</span>
-    </header>
- 
-    <main>
-        <section class="welcome">
-            <h2>Bem-vindo(a)!</h2>
-            <p>Gerencie por aqui os clientes da pet shop e os animais sob os cuidados de cada um.</p>
-        </section>
- 
-        <?php if ($dbError): ?>
-            <div class="error-box"><?= htmlspecialchars($dbError) ?></div>
+
+    <div class="login-container">
+       
+        <div class="logo">
+            <h1>AUmigos</h1>
+            <p>Sistema de Gestão</p>
+        </div>
+
+        
+        <?php if (!empty($erro)): ?>
+            <div class="erro-mensagem">
+                <?= $erro ?>
+            </div>
         <?php endif; ?>
- 
-        <section class="cards">
-            <div class="card">
-                <div class="number"><?= $totalClientes ?></div>
-                <div class="label">Clientes cadastrados</div>
+
+        
+        <form action="index.php" method="POST">
+            <div class="input-group">
+                <label for="usuario">Usuário</label>
+                <input type="text" id="usuario" name="usuario" placeholder="Digite seu usuário" required>
             </div>
-            <div class="card">
-                <div class="number"><?= $totalAnimais ?></div>
-                <div class="label">Animais cadastrados</div>
+
+            <div class="input-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
             </div>
-        </section>
- 
-        <section class="menu">
-            <a href="cliente/listar.php">
-                <div class="titulo"> Clientes</div>
-                <div class="desc">Cadastrar, listar, editar e excluir clientes.</div>
-            </a>
-            <a href="animal/listar.php">
-                <div class="titulo"> Animais</div>
-                <div class="desc">Cadastrar, listar, editar e excluir animais, vinculando cada um ao seu responsável.</div>
-            </a>
-        </section>
-    </main>
- 
-    <footer>
-        AUmigos &copy; <?= date('Y') ?> — Sistema desenvolvido em PHP + MySQL
-    </footer>
- 
+
+            <button type="submit" class="btn-enviar">Entrar</button>
+        </form>
+    </div>
+
 </body>
 </html>
